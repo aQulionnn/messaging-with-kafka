@@ -1,0 +1,13 @@
+﻿services:
+  producer.api:
+    image: producer.api
+    build:
+      context: .
+      dockerfile: Producer.Api/Dockerfile
+
+  consumer.api:
+    image: consumer.api
+    build:
+      context: .
+      dockerfile: Consumer.Api/Dockerfile
+
