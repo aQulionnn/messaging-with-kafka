@@ -1,3 +1,5 @@
+using Consumer.Api.Handlers;
+using Contracts;
 using MassTransit;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,11 +10,20 @@ builder.Services.AddMassTransit(x =>
 {
     x.UsingInMemory();
     
+    x.AddConsumer<PlaceOrderHandler>();
+    
     x.AddRider(rider =>
     {
+        rider.AddConsumer<PlaceOrderHandler>();
+        
         rider.UsingKafka((context, k) =>
         {
-            k.Host("localhost:9092");
+            k.Host("kafka:9092");
+            
+            k.TopicEndpoint<PlaceOrder>("PlaceOrder", "group-id", e =>
+            {
+                e.ConfigureConsumer<PlaceOrderHandler>(context);
+            });
         });
     });
 });
@@ -37,4 +48,4 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.Run();
+app.Run("http://0.0.0.0:8080");
