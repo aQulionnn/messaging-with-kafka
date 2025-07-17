@@ -1,10 +1,16 @@
 using Consumer.Api.Handlers;
+using Consumer.Api.Repositories;
+using Consumer.Api.Settings;
 using Contracts;
 using MassTransit;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+
+builder.Services.Configure<DatabaseSettings>(builder.Configuration.GetSection(nameof(DatabaseSettings)));
 
 builder.Services.AddMassTransit(x =>
 {
