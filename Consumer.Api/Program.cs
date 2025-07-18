@@ -1,3 +1,4 @@
+using Consumer.Api.Data;
 using Consumer.Api.Handlers;
 using Consumer.Api.Repositories;
 using Consumer.Api.Settings;
@@ -8,7 +9,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddSingleton<MongoDbContext>();
+
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 
 builder.Services.Configure<DatabaseSettings>(builder.Configuration.GetSection(nameof(DatabaseSettings)));
 
